@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ラストウォー 司令卓</title>
+<title>ラストウォー</title>
 <style>
 :root{
   --void:#0a0d0f;
@@ -33,13 +33,22 @@ body{
   border-bottom:1px solid var(--etch);
   margin-bottom:16px;
 }
-.bar .id{font-size:10px;letter-spacing:.28em;color:var(--dim)}
-.bar .tm{font-size:12px;color:var(--phos);font-variant-numeric:tabular-nums}
+.bar .id{font-size:14px;letter-spacing:.1em;color:var(--dim)}
+.bar .tm{
+  font-size:14px;color:var(--phos);font-variant-numeric:tabular-nums;
+  background:none;border:1px solid var(--etch);border-radius:3px;
+  font-family:inherit;padding:6px 10px;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+}
+.bar .tm:active{background:var(--plate)}
+.bar .tm #tzlab{
+  font-size:14px;letter-spacing:.06em;color:var(--dim);
+}
 .bar .tm b{font-weight:400;color:var(--dim);margin-right:6px}
 
 /* ── 見出し ── */
 .eyebrow{
-  font-size:9px;letter-spacing:.3em;color:var(--dim);
+  font-size:14px;letter-spacing:.18em;color:var(--dim);
   margin:0 4px 8px;
 }
 
@@ -52,19 +61,19 @@ body{
   padding:20px 20px 18px;
   margin-bottom:10px;
 }
-.hero .k{font-size:9px;letter-spacing:.26em;color:var(--amber);margin-bottom:12px}
+.hero .k{font-size:14px;letter-spacing:.14em;color:var(--amber);margin-bottom:12px}
 .hero .v{
-  font-size:40px;font-weight:600;line-height:1;
+  font-size:44px;font-weight:600;line-height:1;
   font-family:-apple-system,"Hiragino Sans",sans-serif;
   letter-spacing:-.01em;
 }
-.hero .meta{font-size:11px;color:var(--dim);margin-top:9px;font-variant-numeric:tabular-nums}
+.hero .meta{font-size:14px;color:var(--dim);margin-top:9px;font-variant-numeric:tabular-nums}
 .hero .cd{
   margin-top:16px;padding-top:13px;border-top:1px solid var(--etch);
   display:flex;justify-content:space-between;align-items:baseline;
 }
-.hero .cd .l{font-size:10px;letter-spacing:.16em;color:var(--dim)}
-.hero .cd .r{font-size:26px;font-weight:500;color:var(--phos);font-variant-numeric:tabular-nums}
+.hero .cd .l{font-size:14px;letter-spacing:.16em;color:var(--dim)}
+.hero .cd .r{font-size:30px;font-weight:500;color:var(--phos);font-variant-numeric:tabular-nums}
 
 /* ── 行カード ── */
 .card{
@@ -78,14 +87,36 @@ body{
 }
 .card:active{background:#171d21}
 .card .top{display:flex;justify-content:space-between;align-items:center}
-.card .name{font-size:9px;letter-spacing:.24em;color:var(--dim)}
+.card .name{
+  font-size:14px;letter-spacing:.04em;color:var(--dim);
+  line-height:1.45;padding-right:12px;
+}
 .card .val{
-  font-size:15px;font-weight:500;
+  font-size:18px;font-weight:500;
   font-family:-apple-system,"Hiragino Sans",sans-serif;
 }
-.card .sub{font-size:11px;color:var(--dim);margin-top:5px;font-variant-numeric:tabular-nums}
-.mk{font-size:13px;margin-left:9px;font-variant-numeric:tabular-nums}
-.ok{color:var(--phos)} .no{color:var(--dim)} .tri{color:var(--amber)}
+.card .sub{font-size:14px;color:var(--dim);margin-top:5px;font-variant-numeric:tabular-nums}
+.card .top{align-items:flex-start}
+.card .rstack{
+  display:flex;flex-direction:column;align-items:flex-end;gap:3px;
+}
+.card .swap{
+  font-size:14px;color:var(--rust);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.card .stack{
+  margin-top:8px;
+  display:flex;flex-direction:column;align-items:flex-end;gap:5px;
+}
+.card .stack .ln{
+  display:grid;grid-template-columns:auto 20px;
+  align-items:baseline;gap:12px;
+  font-size:14px;color:var(--txt);
+}
+.card .stack .ln i{font-style:normal;color:var(--txt);text-align:right}
+.card .stack .ln .mk{text-align:center}
+.mk{font-size:15px;font-variant-numeric:tabular-nums}
+.ok{color:var(--phos)} .no{color:var(--txt)} .tri{color:var(--amber)}
 
 /* ── 明細ページ ── */
 .page{display:none;padding-top:2px}
@@ -96,13 +127,13 @@ body{
   padding:18px 18px 16px;
   margin-bottom:10px;
 }
-.panel .k{font-size:9px;letter-spacing:.26em;color:var(--dim);margin-bottom:11px}
+.panel .k{font-size:14px;letter-spacing:.14em;color:var(--dim);margin-bottom:11px}
 .panel .big{
-  font-size:34px;font-weight:600;line-height:1.1;
+  font-size:36px;font-weight:600;line-height:1.1;
   font-family:-apple-system,"Hiragino Sans",sans-serif;
 }
-.panel .num{font-size:34px;font-weight:500;color:var(--phos);font-variant-numeric:tabular-nums;line-height:1.1}
-.panel .note{font-size:11px;color:var(--dim);margin-top:8px;font-variant-numeric:tabular-nums;line-height:1.6}
+.panel .num{font-size:38px;font-weight:500;color:var(--phos);font-variant-numeric:tabular-nums;line-height:1.1}
+.panel .note{font-size:14px;color:var(--dim);margin-top:8px;font-variant-numeric:tabular-nums;line-height:1.6}
 .panel.alt{border-left:2px solid var(--rust)}
 .panel.alt .num{color:var(--rust)}
 
@@ -113,26 +144,26 @@ body{
 }
 .tr:last-child{border-bottom:none}
 .tr.hit{background:#1a2119;border-left:2px solid var(--phos);padding-left:14px}
-.tr .h{font-size:12px;color:var(--dim);width:50px;font-variant-numeric:tabular-nums}
+.tr .h{font-size:14px;color:var(--dim);width:58px;font-variant-numeric:tabular-nums}
 .tr.hit .h{color:var(--phos)}
 .tr .c{
-  font-size:14px;flex:1;
+  font-size:16px;flex:1;
   font-family:-apple-system,"Hiragino Sans",sans-serif;
 }
 .tr.hit .c{color:var(--phos);font-weight:600}
-.tr .g{font-size:11px;color:var(--dim)}
+.tr .g{font-size:14px;color:var(--dim)}
 
 .duo{display:flex;gap:8px;margin-bottom:10px}
 .duo>div{
   flex:1;background:var(--plate);border:1px solid var(--etch);
   padding:15px 16px;
 }
-.duo .k{font-size:9px;letter-spacing:.2em;color:var(--dim);margin-bottom:9px}
+.duo .k{font-size:14px;letter-spacing:.12em;color:var(--dim);margin-bottom:9px}
 .duo .a{
-  font-size:22px;font-weight:600;
+  font-size:24px;font-weight:600;
   font-family:-apple-system,"Hiragino Sans",sans-serif;
 }
-.duo .n{font-size:10px;color:var(--dim);margin-top:5px;line-height:1.5}
+.duo .n{font-size:14px;color:var(--dim);margin-top:5px;line-height:1.5}
 
 .grid{
   display:grid;grid-template-columns:repeat(4,1fr);
@@ -142,7 +173,7 @@ body{
 .grid span{
   background:var(--plate);
   padding:13px 4px;text-align:center;
-  font-size:14px;color:var(--txt);font-variant-numeric:tabular-nums;
+  font-size:16px;color:var(--txt);font-variant-numeric:tabular-nums;
 }
 
 /* ── タブ ── */
@@ -158,7 +189,7 @@ nav .in{display:flex;max-width:520px;margin:0 auto}
 nav button{
   flex:1;background:none;border:none;color:var(--dim);
   padding:13px 2px 14px;
-  font-family:inherit;font-size:10px;letter-spacing:.16em;
+  font-family:inherit;font-size:14px;letter-spacing:.02em;
   cursor:pointer;border-top:2px solid transparent;margin-top:-1px;
 }
 nav button.on{color:var(--phos);border-top-color:var(--phos)}
@@ -169,8 +200,8 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
 
 <div class="wrap">
   <div class="bar">
-    <span class="id">LAST WAR / 司令卓</span>
-    <span class="tm"><b id="jst"></b><span id="svr"></span></span>
+    <span class="id">ラストウォー</span>
+    <button class="tm" id="tz"><span id="tzlab"></span><span id="tzclock"></span></button>
   </div>
 
   <!-- ダッシュボード -->
@@ -190,7 +221,7 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
         <span class="name">VS</span>
         <span class="val" id="d-vs">—</span>
       </div>
-      <div class="sub" id="d-vs2"></div>
+      <div class="stack" id="d-vs2"></div>
     </button>
 
     <button class="card" data-go="task">
@@ -202,10 +233,13 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
 
     <button class="card" data-go="tr">
       <div class="top">
-        <span class="name">兵士育成</span>
-        <span class="val" id="d-tr">—</span>
+        <span class="name">次回兵士育成までの残り時間</span>
+        <span class="rstack">
+          <span class="val" id="d-tr">—</span>
+          <span class="swap" id="d-tr2"></span>
+        </span>
       </div>
-      <div class="sub" id="d-tr2"></div>
+      <div class="sub" id="d-tr3"></div>
     </button>
   </div>
 
@@ -249,7 +283,7 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
   <!-- 極秘任務 -->
   <div class="page" id="p-task">
     <div class="panel">
-      <div class="k">本日のキラキラ鯖</div>
+      <div class="k">本日のキラキラサーバー</div>
       <div class="big">グループ <span id="t-grp">—</span></div>
       <div class="note">切替まで <span id="t-cd">—</span></div>
     </div>
@@ -334,6 +368,18 @@ function sParts(sv){
 // サーバー時hour → JST時
 const toJst=h=>(h+11)%24;
 
+// 表示モード： "jst" | "srv"
+let MODE = (()=>{ try{return localStorage.getItem("lw_tz")||"jst";}catch(e){return "jst";} })();
+function setMode(m){
+  MODE=m;
+  try{localStorage.setItem("lw_tz",m);}catch(e){}
+  render();
+}
+// サーバー時hour を 表示モードのhourへ
+const dispH = h => MODE==="jst" ? (h+11)%24 : h;
+// 表示モードのラベル
+const tzName = () => MODE==="jst" ? "JST" : "サーバー";
+
 // slotIndex（0-5）
 const slotOf=h=>Math.floor(h/4);
 
@@ -368,18 +414,15 @@ function render(){
   const sv=serverNow(now), p=sParts(sv);
 
   // ステータスバー
-  const jstH=(sv.getUTCHours()+11)%24;
-  document.getElementById("jst").textContent=
-    "JST "+pad(jstH)+":"+pad(p.min);
-  document.getElementById("svr").textContent=
-    "鯖 "+DAYS[p.day]+" "+pad(p.hour)+":"+pad(p.min)+":"+pad(p.sec);
+  document.getElementById("tzlab").textContent=tzName();
+  document.getElementById("tzclock").textContent=
+    DAYS[p.day]+" "+pad(dispH(p.hour))+":"+pad(p.min)+":"+pad(p.sec);
 
   /* ── 軍拡 ── */
   const cur=slotAt(now,0), nxt=slotAt(now,1);
   const cat=ARMS[cur.day][cur.slot];
   const sH=SLOTS[cur.slot], eH=SLOTS[nxt.slot];
-  const meta="鯖"+DAYS[cur.day]+" "+pad(sH)+":00–"+pad(eH)+":00"+
-             "  /  JST "+pad(toJst(sH))+":00–"+pad(toJst(eH))+":00";
+  const meta=DAYS[cur.day]+"曜 "+pad(dispH(sH))+":00 – "+pad(dispH(eH))+":00";
   const cd=hms(nxt.real-now);
 
   document.getElementById("h-cat").textContent=cat;
@@ -389,15 +432,14 @@ function render(){
   document.getElementById("a-meta").textContent=meta;
   document.getElementById("a-cd").textContent=cd;
 
-  document.getElementById("a-day").textContent="鯖 "+DAYS[cur.day]+"曜日";
+  document.getElementById("a-day").textContent=DAYS[cur.day]+"曜日のスケジュール";
   const at=document.getElementById("a-tbl");
   at.innerHTML="";
   SLOTS.forEach((h,i)=>{
     const d=document.createElement("div");
     d.className="tr"+(i===cur.slot?" hit":"");
-    d.innerHTML='<span class="h">'+pad(toJst(h))+':00</span>'+
-                '<span class="c">'+ARMS[cur.day][i]+'</span>'+
-                '<span class="g">鯖'+pad(h)+':00</span>';
+    d.innerHTML='<span class="h">'+pad(dispH(h))+':00</span>'+
+                '<span class="c">'+ARMS[cur.day][i]+'</span>';
     at.appendChild(d);
   });
 
@@ -405,10 +447,10 @@ function render(){
   const [th,rd,ur]=VS[cur.day];
   document.getElementById("d-vs").textContent=th;
   document.getElementById("d-vs2").innerHTML=
-    'レーダー <span class="mk '+mkCls(rd)+'">'+rd+'</span>'+
-    '　UR <span class="mk '+mkCls(ur)+'">'+ur+'</span>';
+    '<span class="ln"><i>レーダー</i><span class="mk '+mkCls(rd)+'">'+rd+'</span></span>'+
+    '<span class="ln"><i>UR</i><span class="mk '+mkCls(ur)+'">'+ur+'</span></span>';
 
-  document.getElementById("v-day").textContent="鯖 "+DAYS[cur.day]+"曜日";
+  document.getElementById("v-day").textContent=DAYS[cur.day]+"曜日";
   document.getElementById("v-theme").textContent=(th==="ー")?"お休み":th+"の日";
   document.getElementById("v-rd").textContent=(rd==="×")?"やらない":"やる";
   document.getElementById("v-rdn").textContent=(rd==="△")?"（ポイント対象外）":"";
@@ -430,7 +472,7 @@ function render(){
 
   /* ── 極秘任務 ── */
   const grp=kiraGroup(sv);
-  document.getElementById("d-task").textContent="本日 "+grp;
+  document.getElementById("d-task").textContent=grp;
   document.getElementById("t-grp").textContent=grp;
 
   // サーバー0時までのカウントダウン
@@ -452,11 +494,12 @@ function render(){
   }
   if(hit){
     const jh=toJst(SLOTS[hit.slot]);
+    const dh=dispH(SLOTS[hit.slot]);
     document.getElementById("s-cd").textContent=hms(hit.real-now);
     document.getElementById("s-meta").textContent=
-      "鯖"+DAYS[hit.day]+" "+pad(SLOTS[hit.slot])+":00〜  /  JST "+pad(jh)+":00〜";
+      DAYS[hit.day]+"曜 "+pad(dh)+":00 開始";
     document.getElementById("d-tr").textContent=hm(hit.real-now);
-    document.getElementById("d-tr2").textContent="JST "+pad(jh)+":00 開始";
+    document.getElementById("d-tr3").textContent=pad(dh)+":00 開始";
 
     // JST 3:00 の枠なら 1つ前の枠と入れ替えた場合を併記
     const swapEl=document.getElementById("s-swap");
@@ -466,11 +509,12 @@ function render(){
       swapEl.style.display="";
       document.getElementById("s-cd2").textContent=hms(prev-now);
       document.getElementById("s-meta2").textContent=
-        "鯖"+DAYS[hit.day]+" "+pad((SLOTS[hit.slot]+20)%24)+":00〜  /  JST "+pad(ph)+":00〜";
-      document.getElementById("d-tr2").textContent=
-        "JST "+pad(jh)+":00 開始　入替 "+pad(ph)+":00";
+        DAYS[hit.day]+"曜 "+pad(dispH((SLOTS[hit.slot]+20)%24))+":00 開始";
+      document.getElementById("d-tr2").textContent="入替 "+hm(prev-now);
+      document.getElementById("d-tr3").textContent=pad(dh)+":00 開始";
     }else{
       swapEl.style.display="none";
+      document.getElementById("d-tr2").textContent="";
     }
   }
 }
@@ -489,6 +533,9 @@ document.querySelectorAll("nav button").forEach(b=>
   b.addEventListener("click",()=>go(b.dataset.tab)));
 document.querySelectorAll("[data-go]").forEach(c=>
   c.addEventListener("click",()=>go(c.dataset.go)));
+
+document.getElementById("tz").addEventListener("click",()=>
+  setMode(MODE==="jst"?"srv":"jst"));
 
 render();
 setInterval(render,1000);
