@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ラストウォー 司令卓</title>
+<style>
+:root{
+  --void:#0a0d0f;
+  --plate:#12171a;
+  --etch:#1e262b;
+  --phos:#7dd3a0;
+  --amber:#e8a33d;
+  --rust:#c4573f;
+  --txt:#dfe6e4;
+  --dim:#6b7a80;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--void);
+  color:var(--txt);
+  font-family:"SF Mono",ui-monospace,Menlo,monospace;
+  min-height:100vh;
+  padding-bottom:calc(78px + env(safe-area-inset-bottom));
+}
+.wrap{max-width:520px;margin:0 auto;padding:0 14px}
+
+/* ── 上部ステータスバー ── */
+.bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 4px 12px;
+  border-bottom:1px solid var(--etch);
+  margin-bottom:16px;
+}
+.bar .id{font-size:10px;letter-spacing:.28em;color:var(--dim)}
+.bar .tm{font-size:12px;color:var(--phos);font-variant-numeric:tabular-nums}
+.bar .tm b{font-weight:400;color:var(--dim);margin-right:6px}
+
+/* ── 見出し ── */
+.eyebrow{
+  font-size:9px;letter-spacing:.3em;color:var(--dim);
+  margin:0 4px 8px;
+}
+
+/* ── ダッシュボード主枠 ── */
+.hero{
+  position:relative;
+  background:var(--plate);
+  border:1px solid var(--etch);
+  border-left:2px solid var(--amber);
+  padding:20px 20px 18px;
+  margin-bottom:10px;
+}
+.hero .k{font-size:9px;letter-spacing:.26em;color:var(--amber);margin-bottom:12px}
+.hero .v{
+  font-size:40px;font-weight:600;line-height:1;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+  letter-spacing:-.01em;
+}
+.hero .meta{font-size:11px;color:var(--dim);margin-top:9px;font-variant-numeric:tabular-nums}
+.hero .cd{
+  margin-top:16px;padding-top:13px;border-top:1px solid var(--etch);
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.hero .cd .l{font-size:10px;letter-spacing:.16em;color:var(--dim)}
+.hero .cd .r{font-size:26px;font-weight:500;color:var(--phos);font-variant-numeric:tabular-nums}
+
+/* ── 行カード ── */
+.card{
+  display:block;width:100%;text-align:left;
+  background:var(--plate);
+  border:1px solid var(--etch);
+  padding:13px 16px;
+  margin-bottom:8px;
+  color:inherit;font-family:inherit;font-size:inherit;
+  cursor:pointer;
+}
+.card:active{background:#171d21}
+.card .top{display:flex;justify-content:space-between;align-items:center}
+.card .name{font-size:9px;letter-spacing:.24em;color:var(--dim)}
+.card .val{
+  font-size:15px;font-weight:500;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.card .sub{font-size:11px;color:var(--dim);margin-top:5px;font-variant-numeric:tabular-nums}
+.mk{font-size:13px;margin-left:9px;font-variant-numeric:tabular-nums}
+.ok{color:var(--phos)} .no{color:var(--dim)} .tri{color:var(--amber)}
+
+/* ── 明細ページ ── */
+.page{display:none;padding-top:2px}
+.page.on{display:block}
+.panel{
+  background:var(--plate);
+  border:1px solid var(--etch);
+  padding:18px 18px 16px;
+  margin-bottom:10px;
+}
+.panel .k{font-size:9px;letter-spacing:.26em;color:var(--dim);margin-bottom:11px}
+.panel .big{
+  font-size:34px;font-weight:600;line-height:1.1;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.panel .num{font-size:34px;font-weight:500;color:var(--phos);font-variant-numeric:tabular-nums;line-height:1.1}
+.panel .note{font-size:11px;color:var(--dim);margin-top:8px;font-variant-numeric:tabular-nums;line-height:1.6}
+.panel.alt{border-left:2px solid var(--rust)}
+.panel.alt .num{color:var(--rust)}
+
+.tbl{background:var(--plate);border:1px solid var(--etch)}
+.tr{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 16px;border-bottom:1px solid var(--etch);
+}
+.tr:last-child{border-bottom:none}
+.tr.hit{background:#1a2119;border-left:2px solid var(--phos);padding-left:14px}
+.tr .h{font-size:12px;color:var(--dim);width:50px;font-variant-numeric:tabular-nums}
+.tr.hit .h{color:var(--phos)}
+.tr .c{
+  font-size:14px;flex:1;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.tr.hit .c{color:var(--phos);font-weight:600}
+.tr .g{font-size:11px;color:var(--dim)}
+
+.duo{display:flex;gap:8px;margin-bottom:10px}
+.duo>div{
+  flex:1;background:var(--plate);border:1px solid var(--etch);
+  padding:15px 16px;
+}
+.duo .k{font-size:9px;letter-spacing:.2em;color:var(--dim);margin-bottom:9px}
+.duo .a{
+  font-size:22px;font-weight:600;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.duo .n{font-size:10px;color:var(--dim);margin-top:5px;line-height:1.5}
+
+.grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--etch);
+  border:1px solid var(--etch);
+}
+.grid span{
+  background:var(--plate);
+  padding:13px 4px;text-align:center;
+  font-size:14px;color:var(--txt);font-variant-numeric:tabular-nums;
+}
+
+/* ── タブ ── */
+nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(10,13,15,.94);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--etch);
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:10;
+}
+nav .in{display:flex;max-width:520px;margin:0 auto}
+nav button{
+  flex:1;background:none;border:none;color:var(--dim);
+  padding:13px 2px 14px;
+  font-family:inherit;font-size:10px;letter-spacing:.16em;
+  cursor:pointer;border-top:2px solid transparent;margin-top:-1px;
+}
+nav button.on{color:var(--phos);border-top-color:var(--phos)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="bar">
+    <span class="id">LAST WAR / 司令卓</span>
+    <span class="tm"><b id="jst"></b><span id="svr"></span></span>
+  </div>
+
+  <!-- ダッシュボード -->
+  <div class="page on" id="p-home">
+    <div class="hero">
+      <div class="k">現在の軍拡</div>
+      <div class="v" id="h-cat">—</div>
+      <div class="meta" id="h-meta"></div>
+      <div class="cd">
+        <span class="l">切替まで</span>
+        <span class="r" id="h-cd">—</span>
+      </div>
+    </div>
+
+    <button class="card" data-go="vs">
+      <div class="top">
+        <span class="name">VS</span>
+        <span class="val" id="d-vs">—</span>
+      </div>
+      <div class="sub" id="d-vs2"></div>
+    </button>
+
+    <button class="card" data-go="task">
+      <div class="top">
+        <span class="name">極秘任務</span>
+        <span class="val" id="d-task">—</span>
+      </div>
+    </button>
+
+    <button class="card" data-go="tr">
+      <div class="top">
+        <span class="name">兵士育成</span>
+        <span class="val" id="d-tr">—</span>
+      </div>
+      <div class="sub" id="d-tr2"></div>
+    </button>
+  </div>
+
+  <!-- 軍拡 -->
+  <div class="page" id="p-arms">
+    <div class="hero">
+      <div class="k">現在の軍拡</div>
+      <div class="v" id="a-cat">—</div>
+      <div class="meta" id="a-meta"></div>
+      <div class="cd">
+        <span class="l">切替まで</span>
+        <span class="r" id="a-cd">—</span>
+      </div>
+    </div>
+    <div class="eyebrow" id="a-day">スケジュール</div>
+    <div class="tbl" id="a-tbl"></div>
+  </div>
+
+  <!-- VS -->
+  <div class="page" id="p-vs">
+    <div class="panel">
+      <div class="k" id="v-day">VS デイリー</div>
+      <div class="big" id="v-theme">—</div>
+    </div>
+    <div class="duo">
+      <div>
+        <div class="k">レーダー</div>
+        <div class="a" id="v-rd">—</div>
+        <div class="n" id="v-rdn"></div>
+      </div>
+      <div>
+        <div class="k">UR</div>
+        <div class="a" id="v-ur">—</div>
+        <div class="n" id="v-urn"></div>
+      </div>
+    </div>
+    <div class="eyebrow">週間</div>
+    <div class="tbl" id="v-tbl"></div>
+  </div>
+
+  <!-- 極秘任務 -->
+  <div class="page" id="p-task">
+    <div class="panel">
+      <div class="k">本日のキラキラ鯖</div>
+      <div class="big">グループ <span id="t-grp">—</span></div>
+      <div class="note">切替まで <span id="t-cd">—</span></div>
+    </div>
+    <div class="eyebrow">対象サーバー</div>
+    <div class="grid" id="t-grid"></div>
+  </div>
+
+  <!-- 兵士育成 -->
+  <div class="page" id="p-tr">
+    <div class="panel">
+      <div class="k">次の兵士枠まで</div>
+      <div class="num" id="s-cd">—</div>
+      <div class="note" id="s-meta"></div>
+    </div>
+    <div class="panel alt" id="s-swap" style="display:none">
+      <div class="k">入れ替えた場合</div>
+      <div class="num" id="s-cd2">—</div>
+      <div class="note" id="s-meta2"></div>
+    </div>
+  </div>
+</div>
+
+<nav><div class="in">
+  <button class="on" data-tab="home">ホーム</button>
+  <button data-tab="arms">軍拡</button>
+  <button data-tab="vs">VS</button>
+  <button data-tab="task">任務</button>
+  <button data-tab="tr">兵士</button>
+</div></nav>
+
+<script>
+"use strict";
+
+/* ══ 定数 ══ */
+const DAYS=["日","月","火","水","木","金","土"];
+const SLOTS=[0,4,8,12,16,20];            // サーバー時
+const pad=n=>String(n).padStart(2,"0");
+
+// 軍拡：サーバー曜日 → slot0..5
+const ARMS={
+  1:["基地","兵士","英雄","科学","ドローン","英雄"],
+  2:["兵士","科学","基地","ドローン","英雄","基地"],
+  3:["ドローン","英雄","科学","基地","兵士","科学"],
+  4:["基地","兵士","英雄","科学","ドローン","英雄"],
+  5:["科学","ドローン","兵士","英雄","基地","兵士"],
+  6:["兵士","科学","基地","ドローン","英雄","基地"],
+  0:["ドローン","英雄","科学","基地","兵士","科学"]
+};
+
+// VS：テーマ / レーダー / UR   (○=やる △=やる(対象外) ×=やらない)
+const VS={
+  1:["ドローン","○","×"],
+  2:["建造","×","○"],
+  3:["科学","○","×"],
+  4:["英雄","×","×"],
+  5:["準備","○","×"],
+  6:["戦争","△","○"],
+  0:["ー","×","×"]
+};
+
+// サーバー → グループ
+const SRV={
+2085:"C",2086:"C",2087:"A",2089:"A",2090:"A",2091:"B",2092:"B",2095:"C",
+2097:"A",2099:"B",1195:"B",1196:"B",1197:"C",1198:"C",1199:"C",1200:"A",
+1201:"A",1202:"A",1203:"B",1204:"B",1205:"B",1206:"C",1207:"C",1208:"C",
+1209:"A",1210:"A",1211:"A",1212:"B",1213:"B",1214:"B",1215:"B",1216:"B",
+1217:"C",1218:"C",1219:"A",1220:"A",1221:"A",1222:"B",1223:"B",1224:"B",
+1225:"B",1226:"B",1227:"C",1228:"C",1229:"A",1230:"A",1231:"A",1232:"B",
+1233:"B",1234:"B",1235:"B",1236:"B",1237:"C",1238:"C",1239:"C",1240:"A",
+1241:"A",1242:"A",1243:"B",1244:"B",1245:"B",1246:"C",1247:"C",1248:"A",
+1249:"A",1250:"B",1251:"B",1252:"B"
+};
+
+/* ══ 時間軸 ══
+   サーバー時間 = JST − 11h。端末TZに依存しないよう UTC から直接算出。
+   server = UTC − 2h  ( = JST(UTC+9) − 11h )                        */
+function serverNow(d){ return new Date(d.getTime()-2*3600*1000); }
+function sParts(sv){
+  return {day:sv.getUTCDay(), hour:sv.getUTCHours(),
+          min:sv.getUTCMinutes(), sec:sv.getUTCSeconds()};
+}
+// サーバー時hour → JST時
+const toJst=h=>(h+11)%24;
+
+// slotIndex（0-5）
+const slotOf=h=>Math.floor(h/4);
+
+// 現在slotの開始からn個先のslot情報 {day,slot,startDate}
+function slotAt(now,n){
+  const sv=serverNow(now), p=sParts(sv);
+  const base=Date.UTC(sv.getUTCFullYear(),sv.getUTCMonth(),sv.getUTCDate(),
+                      slotOf(p.hour)*4,0,0);
+  const t=new Date(base+n*4*3600*1000);
+  return {day:t.getUTCDay(), slot:slotOf(t.getUTCHours()),
+          real:new Date(t.getTime()+2*3600*1000)};   // 実時刻(UTC基準Date)
+}
+function hms(ms){
+  const s=Math.max(0,Math.floor(ms/1000));
+  return pad(Math.floor(s/3600))+":"+pad(Math.floor(s%3600/60))+":"+pad(s%60);
+}
+function hm(ms){
+  const s=Math.max(0,Math.floor(ms/1000));
+  return pad(Math.floor(s/3600))+":"+pad(Math.floor(s%3600/60));
+}
+
+// キラキラ グループ：シート式 CHAR(64+mod(serial,3)+1) を再現
+function kiraGroup(sv){
+  const serial=Math.floor(Date.UTC(sv.getUTCFullYear(),sv.getUTCMonth(),sv.getUTCDate())
+                          /86400000)+25569;          // 1899-12-30 起点
+  return "ABC"[serial%3];
+}
+
+/* ══ 描画 ══ */
+function render(){
+  const now=new Date();
+  const sv=serverNow(now), p=sParts(sv);
+
+  // ステータスバー
+  const jstH=(sv.getUTCHours()+11)%24;
+  document.getElementById("jst").textContent=
+    "JST "+pad(jstH)+":"+pad(p.min);
+  document.getElementById("svr").textContent=
+    "鯖 "+DAYS[p.day]+" "+pad(p.hour)+":"+pad(p.min)+":"+pad(p.sec);
+
+  /* ── 軍拡 ── */
+  const cur=slotAt(now,0), nxt=slotAt(now,1);
+  const cat=ARMS[cur.day][cur.slot];
+  const sH=SLOTS[cur.slot], eH=SLOTS[nxt.slot];
+  const meta="鯖"+DAYS[cur.day]+" "+pad(sH)+":00–"+pad(eH)+":00"+
+             "  /  JST "+pad(toJst(sH))+":00–"+pad(toJst(eH))+":00";
+  const cd=hms(nxt.real-now);
+
+  document.getElementById("h-cat").textContent=cat;
+  document.getElementById("h-meta").textContent=meta;
+  document.getElementById("h-cd").textContent=cd;
+  document.getElementById("a-cat").textContent=cat;
+  document.getElementById("a-meta").textContent=meta;
+  document.getElementById("a-cd").textContent=cd;
+
+  document.getElementById("a-day").textContent="鯖 "+DAYS[cur.day]+"曜日";
+  const at=document.getElementById("a-tbl");
+  at.innerHTML="";
+  SLOTS.forEach((h,i)=>{
+    const d=document.createElement("div");
+    d.className="tr"+(i===cur.slot?" hit":"");
+    d.innerHTML='<span class="h">'+pad(toJst(h))+':00</span>'+
+                '<span class="c">'+ARMS[cur.day][i]+'</span>'+
+                '<span class="g">鯖'+pad(h)+':00</span>';
+    at.appendChild(d);
+  });
+
+  /* ── VS ── */
+  const [th,rd,ur]=VS[cur.day];
+  document.getElementById("d-vs").textContent=th;
+  document.getElementById("d-vs2").innerHTML=
+    'レーダー <span class="mk '+mkCls(rd)+'">'+rd+'</span>'+
+    '　UR <span class="mk '+mkCls(ur)+'">'+ur+'</span>';
+
+  document.getElementById("v-day").textContent="鯖 "+DAYS[cur.day]+"曜日";
+  document.getElementById("v-theme").textContent=(th==="ー")?"お休み":th+"の日";
+  document.getElementById("v-rd").textContent=(rd==="×")?"やらない":"やる";
+  document.getElementById("v-rdn").textContent=(rd==="△")?"（ポイント対象外）":"";
+  document.getElementById("v-ur").textContent=(ur==="×")?"やらない":"やる";
+  document.getElementById("v-urn").textContent="";
+
+  const vt=document.getElementById("v-tbl");
+  vt.innerHTML="";
+  [1,2,3,4,5,6,0].forEach(dw=>{
+    const [t,r,u]=VS[dw];
+    const d=document.createElement("div");
+    d.className="tr"+(dw===cur.day?" hit":"");
+    d.innerHTML='<span class="h">'+DAYS[dw]+'</span>'+
+                '<span class="c">'+t+'</span>'+
+                '<span class="g"><span class="mk '+mkCls(r)+'">'+r+'</span>'+
+                '<span class="mk '+mkCls(u)+'">'+u+'</span></span>';
+    vt.appendChild(d);
+  });
+
+  /* ── 極秘任務 ── */
+  const grp=kiraGroup(sv);
+  document.getElementById("d-task").textContent="本日 "+grp;
+  document.getElementById("t-grp").textContent=grp;
+
+  // サーバー0時までのカウントダウン
+  const nextMid=Date.UTC(sv.getUTCFullYear(),sv.getUTCMonth(),sv.getUTCDate()+1,0,0,0);
+  document.getElementById("t-cd").textContent=hms(nextMid-sv.getTime());
+
+  const gr=document.getElementById("t-grid");
+  const list=Object.keys(SRV).filter(k=>SRV[k]===grp).map(Number).sort((a,b)=>a-b);
+  if(gr.dataset.g!==grp){
+    gr.dataset.g=grp;
+    gr.innerHTML=list.map(n=>"<span>"+n+"</span>").join("");
+  }
+
+  /* ── 兵士育成 ── */
+  let hit=null;
+  for(let i=1;i<=42;i++){
+    const s=slotAt(now,i);
+    if(ARMS[s.day][s.slot]==="兵士"){ hit=s; break; }
+  }
+  if(hit){
+    const jh=toJst(SLOTS[hit.slot]);
+    document.getElementById("s-cd").textContent=hms(hit.real-now);
+    document.getElementById("s-meta").textContent=
+      "鯖"+DAYS[hit.day]+" "+pad(SLOTS[hit.slot])+":00〜  /  JST "+pad(jh)+":00〜";
+    document.getElementById("d-tr").textContent=hm(hit.real-now);
+    document.getElementById("d-tr2").textContent="JST "+pad(jh)+":00 開始";
+
+    // JST 3:00 の枠なら 1つ前の枠と入れ替えた場合を併記
+    const swapEl=document.getElementById("s-swap");
+    if(jh===3){
+      const prev=new Date(hit.real.getTime()-4*3600*1000);
+      const ph=(jh+24-4)%24;
+      swapEl.style.display="";
+      document.getElementById("s-cd2").textContent=hms(prev-now);
+      document.getElementById("s-meta2").textContent=
+        "鯖"+DAYS[hit.day]+" "+pad((SLOTS[hit.slot]+20)%24)+":00〜  /  JST "+pad(ph)+":00〜";
+      document.getElementById("d-tr2").textContent=
+        "JST "+pad(jh)+":00 開始　入替 "+pad(ph)+":00";
+    }else{
+      swapEl.style.display="none";
+    }
+  }
+}
+function mkCls(m){return m==="○"?"ok":m==="△"?"tri":"no";}
+
+/* ══ タブ ══ */
+const PG={home:"p-home",arms:"p-arms",vs:"p-vs",task:"p-task",tr:"p-tr"};
+function go(t){
+  Object.values(PG).forEach(id=>document.getElementById(id).classList.remove("on"));
+  document.getElementById(PG[t]).classList.add("on");
+  document.querySelectorAll("nav button").forEach(b=>
+    b.classList.toggle("on",b.dataset.tab===t));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav button").forEach(b=>
+  b.addEventListener("click",()=>go(b.dataset.tab)));
+document.querySelectorAll("[data-go]").forEach(c=>
+  c.addEventListener("click",()=>go(c.dataset.go)));
+
+render();
+setInterval(render,1000);
+</script>
+</body>
+</html>
