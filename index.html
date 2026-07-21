@@ -54,12 +54,36 @@ body{
 
 /* ── ダッシュボード主枠 ── */
 .hero{
-  position:relative;
+  position:relative;display:block;width:100%;text-align:left;
   background:var(--plate);
   border:1px solid var(--etch);
   border-left:2px solid var(--amber);
   padding:20px 20px 18px;
-  margin-bottom:10px;
+  margin-bottom:8px;
+  color:inherit;font-family:inherit;cursor:pointer;
+}
+.hero:active{background:#171d21}
+.vsday{
+  font-size:26px;font-weight:600;line-height:1.25;margin-top:4px;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.hr{height:1px;background:var(--etch);margin:14px 0 12px}
+/* 軍拡パネル */
+.aline{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-top:9px;
+}
+.aline .t{font-size:14px;font-variant-numeric:tabular-nums}
+.aline .c{font-family:-apple-system,"Hiragino Sans",sans-serif}
+.aline.now .t{color:var(--txt)}
+.aline.now .c{font-size:18px;font-weight:600;color:var(--txt)}
+.aline.nxt .t{color:var(--dim)}
+.aline.nxt .c{font-size:16px;font-weight:400;color:var(--dim)}
+.cdrow{display:flex;justify-content:space-between;align-items:baseline}
+.cdrow .l{font-size:14px;color:var(--dim)}
+.cdrow .r{
+  font-size:26px;font-weight:500;color:var(--phos);
+  font-variant-numeric:tabular-nums;
 }
 .hero .k{font-size:14px;letter-spacing:.14em;color:var(--amber);margin-bottom:12px}
 .hero .v{
@@ -87,6 +111,7 @@ body{
 }
 .card:active{background:#171d21}
 .card .top{display:flex;justify-content:space-between;align-items:center}
+.card>.name{display:block;margin-bottom:4px}
 .card .name{
   font-size:14px;letter-spacing:.04em;color:var(--dim);
   line-height:1.45;padding-right:12px;
@@ -104,17 +129,12 @@ body{
   font-size:14px;color:var(--rust);
   font-variant-numeric:tabular-nums;white-space:nowrap;
 }
-.card .stack{
-  margin-top:8px;
-  display:flex;flex-direction:column;align-items:flex-end;gap:5px;
-}
-.card .stack .ln{
-  display:grid;grid-template-columns:auto 28px;
-  align-items:center;gap:14px;
+.stack{display:flex;flex-direction:column;gap:8px}
+.stack .ln{
+  display:flex;justify-content:space-between;align-items:center;
   font-size:16px;color:var(--txt);
 }
-.card .stack .ln i{font-style:normal;color:var(--txt);text-align:right}
-.card .stack .ln .mk{text-align:center}
+.stack .ln i{font-style:normal;color:var(--txt)}
 .mk{
   display:inline-flex;align-items:center;justify-content:center;
   width:28px;height:28px;border-radius:50%;
@@ -124,7 +144,21 @@ body{
 .mk.ok{background:var(--phos);color:#0a0d0f}
 .mk.tri{background:var(--amber);color:#0a0d0f}
 .mk.no{background:#2b3238;color:#8d99a0}
-.mk.sp{margin-left:18px}
+
+.thead{
+  display:flex;align-items:center;
+  padding:9px 16px;border-bottom:1px solid var(--etch);
+  background:#161c20;
+}
+.thead .h{width:58px}
+.thead .c{flex:1}
+.thead .g,.tr .g{
+  display:grid;grid-template-columns:56px 56px;
+  justify-items:center;align-items:center;
+}
+.thead .g span{
+  font-size:14px;color:var(--dim);white-space:nowrap;
+}
 .ok{color:var(--phos)} .no{color:var(--txt)} .tri{color:var(--amber)}
 
 /* ── 明細ページ ── */
@@ -215,28 +249,28 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
 
   <!-- ダッシュボード -->
   <div class="page on" id="p-home">
-    <div class="hero">
-      <div class="k">現在の軍拡</div>
-      <div class="v" id="h-cat">—</div>
-      <div class="meta" id="h-meta"></div>
-      <div class="cd">
-        <span class="l">切替まで</span>
-        <span class="r" id="h-cd">—</span>
-      </div>
-    </div>
 
-    <button class="card" data-go="vs">
-      <div class="top">
-        <span class="name">VS</span>
-        <span class="val" id="d-vs">—</span>
-      </div>
-      <div class="stack" id="d-vs2"></div>
+    <button class="hero" data-go="vs">
+      <div class="k">今日は</div>
+      <div class="vsday" id="h-vs">—</div>
+      <div class="hr"></div>
+      <div class="stack" id="h-vs2"></div>
     </button>
 
-    <button class="card" data-go="task">
-      <div class="top">
-        <span class="name">極秘任務</span>
-        <span class="val" id="d-task">—</span>
+    <button class="card" data-go="arms">
+      <div class="name">軍拡</div>
+      <div class="aline now">
+        <span class="t" id="h-a1t"></span>
+        <span class="c" id="h-a1c"></span>
+      </div>
+      <div class="aline nxt">
+        <span class="t" id="h-a2t"></span>
+        <span class="c" id="h-a2c"></span>
+      </div>
+      <div class="hr"></div>
+      <div class="cdrow">
+        <span class="l">切替まで</span>
+        <span class="r" id="h-cd">—</span>
       </div>
     </button>
 
@@ -249,6 +283,13 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
         </span>
       </div>
       <div class="sub" id="d-tr3"></div>
+    </button>
+
+    <button class="card" data-go="task">
+      <div class="top">
+        <span class="name">極秘任務</span>
+        <span class="val" id="d-task">—</span>
+      </div>
     </button>
   </div>
 
@@ -434,8 +475,13 @@ function render(){
   const meta=DAYS[cur.day]+"曜 "+pad(dispH(sH))+":00 – "+pad(dispH(eH))+":00";
   const cd=hms(nxt.real-now);
 
-  document.getElementById("h-cat").textContent=cat;
-  document.getElementById("h-meta").textContent=meta;
+  const nxt2=slotAt(now,2);
+  document.getElementById("h-a1t").textContent=
+    pad(dispH(sH))+":00 – "+pad(dispH(eH))+":00";
+  document.getElementById("h-a1c").textContent=cat;
+  document.getElementById("h-a2t").textContent=
+    pad(dispH(eH))+":00 – "+pad(dispH(SLOTS[nxt2.slot]))+":00";
+  document.getElementById("h-a2c").textContent=ARMS[nxt.day][nxt.slot];
   document.getElementById("h-cd").textContent=cd;
   document.getElementById("a-cat").textContent=cat;
   document.getElementById("a-meta").textContent=meta;
@@ -454,8 +500,8 @@ function render(){
 
   /* ── VS ── */
   const [th,rd,ur]=VS[cur.day];
-  document.getElementById("d-vs").textContent=th;
-  document.getElementById("d-vs2").innerHTML=
+  document.getElementById("h-vs").textContent=(th==="ー")?"お休み":th+"の日";
+  document.getElementById("h-vs2").innerHTML=
     '<span class="ln"><i>UR</i><span class="mk '+mkCls(ur)+'">'+ur+'</span></span>'+
     '<span class="ln"><i>レーダー</i><span class="mk '+mkCls(rd)+'">'+rd+'</span></span>';
 
@@ -467,7 +513,9 @@ function render(){
   document.getElementById("v-urn").textContent="";
 
   const vt=document.getElementById("v-tbl");
-  vt.innerHTML="";
+  vt.innerHTML='<div class="thead"><span class="h"></span>'+
+               '<span class="c"></span>'+
+               '<span class="g"><span>UR</span><span>レーダー</span></span></div>';
   [1,2,3,4,5,6,0].forEach(dw=>{
     const [t,r,u]=VS[dw];
     const d=document.createElement("div");
@@ -475,7 +523,7 @@ function render(){
     d.innerHTML='<span class="h">'+DAYS[dw]+'</span>'+
                 '<span class="c">'+t+'</span>'+
                 '<span class="g"><span class="mk '+mkCls(u)+'">'+u+'</span>'+
-                '<span class="mk sp '+mkCls(r)+'">'+r+'</span></span>';
+                '<span class="mk '+mkCls(r)+'">'+r+'</span></span>';
     vt.appendChild(d);
   });
 
