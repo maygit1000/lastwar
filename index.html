@@ -109,13 +109,22 @@ body{
   display:flex;flex-direction:column;align-items:flex-end;gap:5px;
 }
 .card .stack .ln{
-  display:grid;grid-template-columns:auto 20px;
-  align-items:baseline;gap:12px;
-  font-size:14px;color:var(--txt);
+  display:grid;grid-template-columns:auto 28px;
+  align-items:center;gap:14px;
+  font-size:16px;color:var(--txt);
 }
 .card .stack .ln i{font-style:normal;color:var(--txt);text-align:right}
 .card .stack .ln .mk{text-align:center}
-.mk{font-size:15px;font-variant-numeric:tabular-nums}
+.mk{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:50%;
+  font-size:16px;font-weight:700;line-height:1;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.mk.ok{background:var(--phos);color:#0a0d0f}
+.mk.tri{background:var(--amber);color:#0a0d0f}
+.mk.no{background:#2b3238;color:#8d99a0}
+.mk.sp{margin-left:18px}
 .ok{color:var(--phos)} .no{color:var(--txt)} .tri{color:var(--amber)}
 
 /* ── 明細ページ ── */
@@ -266,14 +275,14 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
     </div>
     <div class="duo">
       <div>
-        <div class="k">レーダー</div>
-        <div class="a" id="v-rd">—</div>
-        <div class="n" id="v-rdn"></div>
-      </div>
-      <div>
         <div class="k">UR</div>
         <div class="a" id="v-ur">—</div>
         <div class="n" id="v-urn"></div>
+      </div>
+      <div>
+        <div class="k">レーダー</div>
+        <div class="a" id="v-rd">—</div>
+        <div class="n" id="v-rdn"></div>
       </div>
     </div>
     <div class="eyebrow">週間</div>
@@ -447,8 +456,8 @@ function render(){
   const [th,rd,ur]=VS[cur.day];
   document.getElementById("d-vs").textContent=th;
   document.getElementById("d-vs2").innerHTML=
-    '<span class="ln"><i>レーダー</i><span class="mk '+mkCls(rd)+'">'+rd+'</span></span>'+
-    '<span class="ln"><i>UR</i><span class="mk '+mkCls(ur)+'">'+ur+'</span></span>';
+    '<span class="ln"><i>UR</i><span class="mk '+mkCls(ur)+'">'+ur+'</span></span>'+
+    '<span class="ln"><i>レーダー</i><span class="mk '+mkCls(rd)+'">'+rd+'</span></span>';
 
   document.getElementById("v-day").textContent=DAYS[cur.day]+"曜日";
   document.getElementById("v-theme").textContent=(th==="ー")?"お休み":th+"の日";
@@ -465,8 +474,8 @@ function render(){
     d.className="tr"+(dw===cur.day?" hit":"");
     d.innerHTML='<span class="h">'+DAYS[dw]+'</span>'+
                 '<span class="c">'+t+'</span>'+
-                '<span class="g"><span class="mk '+mkCls(r)+'">'+r+'</span>'+
-                '<span class="mk '+mkCls(u)+'">'+u+'</span></span>';
+                '<span class="g"><span class="mk '+mkCls(u)+'">'+u+'</span>'+
+                '<span class="mk sp '+mkCls(r)+'">'+r+'</span></span>';
     vt.appendChild(d);
   });
 
