@@ -181,6 +181,53 @@ body{
 .panel.alt .num{color:var(--rust)}
 
 .tbl{background:var(--plate);border:1px solid var(--etch)}
+.dayhead{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}
+.dayhead .eyebrow{margin:0}
+.dayhead .nav{
+  background:none;border:1px solid var(--etch);border-radius:4px;
+  color:var(--dim);font-family:inherit;font-size:18px;line-height:1;
+  width:34px;height:30px;cursor:pointer;
+}
+.dayhead .nav:active{background:var(--plate);color:var(--txt)}
+.grow{display:flex;align-items:center;gap:14px}
+.tin{
+  flex:none;background:var(--void);color:var(--txt);
+  border:1px solid var(--etch);border-radius:4px;
+  font-family:inherit;font-size:20px;padding:9px 12px;
+  font-variant-numeric:tabular-nums;
+}
+.gres{
+  font-size:26px;font-weight:600;color:var(--phos);
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.tr .n{font-size:14px;color:var(--dim);width:64px}
+.tr.cand .n{color:var(--phos)}
+.gcard{
+  background:var(--plate);border:1px solid var(--etch);
+  padding:15px 16px;margin-bottom:8px;
+}
+.gcard .gh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px}
+.gcard .gc{
+  font-size:20px;font-weight:600;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.gcard .gt{font-size:14px;color:var(--dim);font-variant-numeric:tabular-nums}
+.gcard .grow{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-top:8px;font-size:15px;
+}
+.gcard .grow .lb{color:var(--dim);font-size:14px}
+.gcard .grow .rv{
+  font-variant-numeric:tabular-nums;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.gcard .grow .rv.on{color:var(--phos);font-weight:600}
+.gcard .grow .rv.off{color:var(--dim)}
+.gcard.soon{border-left:2px solid var(--amber)}
+.hint{
+  font-size:14px;color:var(--dim);text-align:center;
+  margin-top:10px;letter-spacing:.02em;
+}
 .tr{
   display:flex;align-items:center;gap:14px;
   padding:12px 16px;border-bottom:1px solid var(--etch);
@@ -274,7 +321,7 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
       </div>
     </button>
 
-    <button class="card" data-go="tr">
+    <button class="card" data-go="arms">
       <div class="top">
         <span class="name">次回兵士育成までの残り時間</span>
         <span class="rstack">
@@ -304,8 +351,13 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
         <span class="r" id="a-cd">—</span>
       </div>
     </div>
-    <div class="eyebrow" id="a-day">スケジュール</div>
+    <div class="dayhead">
+      <button class="nav" id="a-prev" aria-label="前日">‹</button>
+      <span class="eyebrow" id="a-day">スケジュール</span>
+      <button class="nav" id="a-next" aria-label="翌日">›</button>
+    </div>
     <div class="tbl" id="a-tbl"></div>
+    <div class="hint" id="a-hint"></div>
   </div>
 
   <!-- VS -->
@@ -313,18 +365,6 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
     <div class="panel">
       <div class="k" id="v-day">VS デイリー</div>
       <div class="big" id="v-theme">—</div>
-    </div>
-    <div class="duo">
-      <div>
-        <div class="k">UR</div>
-        <div class="a" id="v-ur">—</div>
-        <div class="n" id="v-urn"></div>
-      </div>
-      <div>
-        <div class="k">レーダー</div>
-        <div class="a" id="v-rd">—</div>
-        <div class="n" id="v-rdn"></div>
-      </div>
     </div>
     <div class="eyebrow">週間</div>
     <div class="tbl" id="v-tbl"></div>
@@ -341,19 +381,13 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
     <div class="grid" id="t-grid"></div>
   </div>
 
-  <!-- 兵士育成 -->
-  <div class="page" id="p-tr">
-    <div class="panel">
-      <div class="k">次の兵士枠まで</div>
-      <div class="num" id="s-cd">—</div>
-      <div class="note" id="s-meta"></div>
-    </div>
-    <div class="panel alt" id="s-swap" style="display:none">
-      <div class="k">入れ替えた場合</div>
-      <div class="num" id="s-cd2">—</div>
-      <div class="note" id="s-meta2"></div>
-    </div>
+  <!-- 長官 -->
+  <div class="page" id="p-gov">
+    <div class="eyebrow">軍拡が近い順・就任が時間内に収まる並び順</div>
+    <div id="g-list"></div>
   </div>
+  </div>
+
 </div>
 
 <nav><div class="in">
@@ -361,7 +395,7 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
   <button data-tab="arms">軍拡</button>
   <button data-tab="vs">VS</button>
   <button data-tab="task">任務</button>
-  <button data-tab="tr">兵士</button>
+  <button data-tab="gov">長官</button>
 </div></nav>
 
 <script>
@@ -386,7 +420,7 @@ const ARMS={
 // VS：テーマ / レーダー / UR   (○=やる △=やる(対象外) ×=やらない)
 const VS={
   1:["ドローン","○","×"],
-  2:["建造","×","○"],
+  2:["基地","×","○"],
   3:["科学","○","×"],
   4:["英雄","×","×"],
   5:["準備","○","×"],
@@ -419,6 +453,7 @@ function sParts(sv){
 const toJst=h=>(h+11)%24;
 
 // 表示モード： "jst" | "srv"
+let DAYOFF = 0;
 let MODE = (()=>{ try{return localStorage.getItem("lw_tz")||"jst";}catch(e){return "jst";} })();
 function setMode(m){
   MODE=m;
@@ -487,14 +522,18 @@ function render(){
   document.getElementById("a-meta").textContent=meta;
   document.getElementById("a-cd").textContent=cd;
 
-  document.getElementById("a-day").textContent=DAYS[cur.day]+"曜日のスケジュール";
+  const vd=(cur.day+DAYOFF%7+7)%7;
+  document.getElementById("a-day").textContent=DAYS[vd]+"曜日のスケジュール";
+  document.getElementById("a-hint").textContent=
+    DAYOFF===0?"左右スワイプで他の曜日":
+    (DAYOFF>0?"+"+DAYOFF+"日":DAYOFF+"日")+"　タップで戻る";
   const at=document.getElementById("a-tbl");
   at.innerHTML="";
   SLOTS.forEach((h,i)=>{
     const d=document.createElement("div");
-    d.className="tr"+(i===cur.slot?" hit":"");
+    d.className="tr"+((DAYOFF===0&&i===cur.slot)?" hit":"");
     d.innerHTML='<span class="h">'+pad(dispH(h))+':00</span>'+
-                '<span class="c">'+ARMS[cur.day][i]+'</span>';
+                '<span class="c">'+ARMS[vd][i]+'</span>';
     at.appendChild(d);
   });
 
@@ -507,10 +546,6 @@ function render(){
 
   document.getElementById("v-day").textContent=DAYS[cur.day]+"曜日";
   document.getElementById("v-theme").textContent=(th==="ー")?"お休み":th+"の日";
-  document.getElementById("v-rd").textContent=(rd==="×")?"やらない":"やる";
-  document.getElementById("v-rdn").textContent=(rd==="△")?"（ポイント対象外）":"";
-  document.getElementById("v-ur").textContent=(ur==="×")?"やらない":"やる";
-  document.getElementById("v-urn").textContent="";
 
   const vt=document.getElementById("v-tbl");
   vt.innerHTML='<div class="thead"><span class="h"></span>'+
@@ -543,43 +578,91 @@ function render(){
     gr.innerHTML=list.map(n=>"<span>"+n+"</span>").join("");
   }
 
-  /* ── 兵士育成 ── */
+  /* ── 兵士育成（ダッシュボードのみ） ── */
   let hit=null;
   for(let i=1;i<=42;i++){
-    const s=slotAt(now,i);
-    if(ARMS[s.day][s.slot]==="兵士"){ hit=s; break; }
+    const t=slotAt(now,i);
+    if(ARMS[t.day][t.slot]==="兵士"){ hit=t; break; }
   }
   if(hit){
     const jh=toJst(SLOTS[hit.slot]);
     const dh=dispH(SLOTS[hit.slot]);
-    document.getElementById("s-cd").textContent=hms(hit.real-now);
-    document.getElementById("s-meta").textContent=
-      DAYS[hit.day]+"曜 "+pad(dh)+":00 開始";
     document.getElementById("d-tr").textContent=hm(hit.real-now);
     document.getElementById("d-tr3").textContent=pad(dh)+":00 開始";
-
     // JST 3:00 の枠なら 1つ前の枠と入れ替えた場合を併記
-    const swapEl=document.getElementById("s-swap");
     if(jh===3){
       const prev=new Date(hit.real.getTime()-4*3600*1000);
-      const ph=(jh+24-4)%24;
-      swapEl.style.display="";
-      document.getElementById("s-cd2").textContent=hms(prev-now);
-      document.getElementById("s-meta2").textContent=
-        DAYS[hit.day]+"曜 "+pad(dispH((SLOTS[hit.slot]+20)%24))+":00 開始";
       document.getElementById("d-tr2").textContent="入替 "+hm(prev-now);
-      document.getElementById("d-tr3").textContent=pad(dh)+":00 開始";
     }else{
-      swapEl.style.display="none";
       document.getElementById("d-tr2").textContent="";
     }
   }
+  /* ── 長官 ── */
+  govRender(now);
 }
+
+const GOV_STEP=5;
+const GOV_CATS=["科学","基地","兵士"];
+const GOV_LABEL={"科学":"科学","基地":"建造","兵士":"兵士"};
+function govRender(now){
+  const ms=60000*GOV_STEP;
+  // 各カテゴリの「次の軍拡時間」を求める
+  const items=GOV_CATS.map(cat=>{
+    for(let i=0;i<=42;i++){
+      const t=slotAt(now,i);
+      if(ARMS[t.day][t.slot]===cat){
+        const startReal=t.real;
+        const endReal=new Date(startReal.getTime()+4*3600*1000);
+        if(endReal>now) return {cat,startReal,endReal,slot:t.slot,day:t.day};
+      }
+    }
+    return {cat,startReal:null};
+  });
+  // 軍拡が近い順（開始時刻昇順）
+  items.sort((a,b)=>a.startReal-b.startReal);
+
+  const box=document.getElementById("g-list");
+  box.innerHTML="";
+  items.forEach((it,idx)=>{
+    const sH=SLOTS[it.slot], eH=(SLOTS[it.slot]+4)%24;
+    const toStart=it.startReal-now;
+    let nEarly=Math.max(1,Math.ceil((it.startReal-now)/ms)+1);
+    let nLate =Math.floor((it.endReal-now)/ms);
+    if(toStart<=0) nEarly=1;
+
+    const candA=Math.min(nEarly,50), candB=Math.min(nLate,50);
+    const appA=Math.max(nEarly,51)-50, appB=Math.min(nLate,100)-50;
+    const fmt=(a,b)=> b<1 ? {t:"—",on:false}
+                    : {t:(a===b?a+"番目":a+" 〜 "+b+"番目"),on:true};
+    const c=fmt(candA,candB), ap=fmt(appA>=1?appA:0, appB>=1?appB:0);
+
+    const el=document.createElement("div");
+    el.className="gcard"+(idx===0?" soon":"");
+    const status = toStart>0 ? "あと "+hm(toStart)+" で開始" : "進行中";
+    let body;
+    if(nEarly>100){
+      body='<div class="grow"><span class="lb">まだ早い</span><span class="rv off"></span></div>';
+    }else{
+      body='<div class="grow"><span class="lb">候補者</span>'+
+           '<span class="rv '+(c.on?"on":"off")+'">'+c.t+'</span></div>'+
+           '<div class="grow"><span class="lb">応募者</span>'+
+           '<span class="rv '+(ap.on?"on":"off")+'">'+ap.t+'</span></div>';
+    }
+    el.innerHTML=
+      '<div class="gh"><span class="gc">'+(GOV_LABEL[it.cat]||it.cat)+'</span>'+
+      '<span class="gt">'+pad(dispH(sH))+":00 – "+pad(dispH(eH))+':00</span></div>'+
+      '<div class="gt" style="margin-bottom:4px">'+status+'</div>'+
+      body;
+    box.appendChild(el);
+  });
+}
+
 function mkCls(m){return m==="○"?"ok":m==="△"?"tri":"no";}
 
 /* ══ タブ ══ */
-const PG={home:"p-home",arms:"p-arms",vs:"p-vs",task:"p-task",tr:"p-tr"};
+const PG={home:"p-home",arms:"p-arms",vs:"p-vs",task:"p-task",gov:"p-gov"};
 function go(t){
+  DAYOFF=0;
   Object.values(PG).forEach(id=>document.getElementById(id).classList.remove("on"));
   document.getElementById(PG[t]).classList.add("on");
   document.querySelectorAll("nav button").forEach(b=>
@@ -593,6 +676,27 @@ document.querySelectorAll("[data-go]").forEach(c=>
 
 document.getElementById("tz").addEventListener("click",()=>
   setMode(MODE==="jst"?"srv":"jst"));
+
+/* ── 軍拡タブ：曜日送り ── */
+function shiftDay(n){ DAYOFF=(DAYOFF+n%7+7)%7; render(); }
+document.getElementById("a-prev").addEventListener("click",()=>shiftDay(-1));
+document.getElementById("a-next").addEventListener("click",()=>shiftDay(1));
+document.getElementById("a-hint").addEventListener("click",()=>{DAYOFF=0;render();});
+
+(function(){
+  const el=document.getElementById("p-arms");
+  let x0=null,y0=null;
+  el.addEventListener("touchstart",e=>{
+    x0=e.changedTouches[0].clientX; y0=e.changedTouches[0].clientY;
+  },{passive:true});
+  el.addEventListener("touchend",e=>{
+    if(x0===null) return;
+    const dx=e.changedTouches[0].clientX-x0;
+    const dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)) shiftDay(dx<0?1:-1);
+    x0=y0=null;
+  },{passive:true});
+})();
 
 render();
 setInterval(render,1000);
