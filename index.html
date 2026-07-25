@@ -69,22 +69,34 @@ body{
 }
 .hr{height:1px;background:var(--etch);margin:14px 0 12px}
 /* 軍拡パネル */
-.aline{
-  display:flex;justify-content:space-between;align-items:baseline;
-  margin-top:9px;
+.prow{
+  display:grid;
+  grid-template-columns:20px 4.5em 1fr;
+  align-items:baseline;column-gap:10px;
+  margin-top:10px;
 }
-.aline .t{font-size:14px;font-variant-numeric:tabular-nums}
-.aline .c{font-family:-apple-system,"Hiragino Sans",sans-serif}
-.aline.now .t{color:var(--txt)}
-.aline.now .c{font-size:18px;font-weight:600;color:var(--txt)}
-.aline.nxt .t{color:var(--dim)}
-.aline.nxt .c{font-size:16px;font-weight:400;color:var(--dim)}
-.cdrow{display:flex;justify-content:space-between;align-items:baseline}
-.cdrow .l{font-size:14px;color:var(--dim)}
-.cdrow .r{
-  font-size:26px;font-weight:500;color:var(--phos);
-  font-variant-numeric:tabular-nums;
+.prow .lb{font-size:14px;color:var(--dim)}
+.prow .cat{
+  font-family:-apple-system,"Hiragino Sans",sans-serif;font-weight:600;
+  white-space:nowrap;
 }
+.prow .rng{
+  font-size:14px;font-variant-numeric:tabular-nums;
+  color:var(--dim);
+  display:grid;grid-template-columns:1.4em auto;justify-content:end;
+  column-gap:2px;
+}
+.prow .rng .pf{text-align:right}
+.prow .rng .tm{text-align:right;white-space:nowrap}
+.prow .rem{
+  font-size:20px;font-weight:500;color:var(--phos);
+  font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;
+}
+.prow.now .cat{font-size:18px;color:var(--txt)}
+.prow.now .rng{color:var(--dim)}
+.prow.nxt .lb{color:var(--dim)}
+.prow.nxt .cat{font-size:16px;font-weight:400;color:var(--dim)}
+.prow.nxt .rng{color:var(--dim)}
 .hero .k{font-size:14px;letter-spacing:.14em;color:var(--amber);margin-bottom:12px}
 .hero .v{
   font-size:44px;font-weight:600;line-height:1;
@@ -111,7 +123,25 @@ body{
 }
 .card:active{background:#171d21}
 .card .top{display:flex;justify-content:space-between;align-items:center}
-.card>.name{display:block;margin-bottom:4px}
+.card>.name,.thd .name{display:block;margin-bottom:4px;color:var(--amber)}
+.gline{
+  font-size:16px;color:var(--txt);margin-top:6px;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.gline .lead{color:var(--dim);font-size:14px}
+.gline .rt{display:flex;align-items:baseline;gap:8px}
+.gline .gcat{font-weight:600}
+.gline .gnum{color:var(--phos);font-weight:600;font-variant-numeric:tabular-nums}
+.gline .wait{color:var(--dim)}
+.thd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.thd .name{margin:0}
+.cnt{display:flex;align-items:baseline;gap:8px}
+.cnt .cl{font-size:14px;color:var(--dim)}
+.cnt .cv{
+  font-size:18px;font-weight:500;color:var(--phos);
+  font-variant-numeric:tabular-nums;
+}
 .card .name{
   font-size:14px;letter-spacing:.04em;color:var(--dim);
   line-height:1.45;padding-right:12px;
@@ -305,31 +335,37 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
     </button>
 
     <button class="card" data-go="arms">
-      <div class="name">軍拡</div>
-      <div class="aline now">
-        <span class="t" id="h-a1t"></span>
-        <span class="c" id="h-a1c"></span>
+      <div class="thd">
+        <span class="name">軍拡</span>
+        <span class="cnt"><span class="cl">切替まで</span><span class="cv" id="h-cd">—</span></span>
       </div>
-      <div class="aline nxt">
-        <span class="t" id="h-a2t"></span>
-        <span class="c" id="h-a2c"></span>
+      <div class="prow now">
+        <span class="lb">今</span>
+        <span class="cat" id="h-a1c"></span>
+        <span class="rng" id="h-a1t"></span>
       </div>
-      <div class="hr"></div>
-      <div class="cdrow">
-        <span class="l">切替まで</span>
-        <span class="r" id="h-cd">—</span>
+      <div class="prow nxt">
+        <span class="lb">次</span>
+        <span class="cat" id="h-a2c"></span>
+        <span class="rng" id="h-a2t"></span>
       </div>
     </button>
 
     <button class="card" data-go="arms">
-      <div class="top">
-        <span class="name">次回兵士育成までの残り時間</span>
-        <span class="rstack">
-          <span class="val" id="d-tr">—</span>
-          <span class="swap" id="d-tr2"></span>
-        </span>
+      <div class="thd">
+        <span class="name">兵士育成</span>
+        <span class="cnt"><span class="cl">次の軍拡まで</span><span class="cv" id="d-tr">—</span></span>
       </div>
-      <div class="sub" id="d-tr3"></div>
+      <div class="prow now">
+        <span class="lb">次</span>
+        <span class="cat">兵士</span>
+        <span class="rng" id="d-tr-rng"></span>
+      </div>
+    </button>
+
+    <button class="card" data-go="gov">
+      <div class="name">長官</div>
+      <div class="gline" id="d-gov">—</div>
     </button>
 
     <button class="card" data-go="task">
@@ -392,8 +428,8 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
 
 <nav><div class="in">
   <button class="on" data-tab="home">ホーム</button>
-  <button data-tab="arms">軍拡</button>
   <button data-tab="vs">VS</button>
+  <button data-tab="arms">軍拡</button>
   <button data-tab="task">任務</button>
   <button data-tab="gov">長官</button>
 </div></nav>
@@ -511,11 +547,11 @@ function render(){
   const cd=hms(nxt.real-now);
 
   const nxt2=slotAt(now,2);
-  document.getElementById("h-a1t").textContent=
-    pad(dispH(sH))+":00 – "+pad(dispH(eH))+":00";
+  document.getElementById("h-a1t").innerHTML=
+    '<span class="pf"></span><span class="tm">'+pad(dispH(sH))+":00 – "+pad(dispH(eH))+':00</span>';
   document.getElementById("h-a1c").textContent=cat;
-  document.getElementById("h-a2t").textContent=
-    pad(dispH(eH))+":00 – "+pad(dispH(SLOTS[nxt2.slot]))+":00";
+  document.getElementById("h-a2t").innerHTML=
+    '<span class="pf"></span><span class="tm">'+pad(dispH(eH))+":00 – "+pad(dispH(SLOTS[nxt2.slot]))+':00</span>';
   document.getElementById("h-a2c").textContent=ARMS[nxt.day][nxt.slot];
   document.getElementById("h-cd").textContent=cd;
   document.getElementById("a-cat").textContent=cat;
@@ -569,7 +605,7 @@ function render(){
 
   // サーバー0時までのカウントダウン
   const nextMid=Date.UTC(sv.getUTCFullYear(),sv.getUTCMonth(),sv.getUTCDate()+1,0,0,0);
-  document.getElementById("t-cd").textContent=hms(nextMid-sv.getTime());
+  document.getElementById("t-cd").textContent=hm(nextMid-sv.getTime());
 
   const gr=document.getElementById("t-grid");
   const list=Object.keys(SRV).filter(k=>SRV[k]===grp).map(Number).sort((a,b)=>a-b);
@@ -585,17 +621,19 @@ function render(){
     if(ARMS[t.day][t.slot]==="兵士"){ hit=t; break; }
   }
   if(hit){
-    const jh=toJst(SLOTS[hit.slot]);
     const dh=dispH(SLOTS[hit.slot]);
-    document.getElementById("d-tr").textContent=hm(hit.real-now);
-    document.getElementById("d-tr3").textContent=pad(dh)+":00 開始";
-    // JST 3:00 の枠なら 1つ前の枠と入れ替えた場合を併記
-    if(jh===3){
-      const prev=new Date(hit.real.getTime()-4*3600*1000);
-      document.getElementById("d-tr2").textContent="入替 "+hm(prev-now);
-    }else{
-      document.getElementById("d-tr2").textContent="";
-    }
+    const dhEnd=dispH((SLOTS[hit.slot]+4)%24);
+    // 表示暦日で今日/翌日を判定（表示モードのオフセットを加味）
+    const offMs=(MODE==="jst"?9:-2)*3600*1000;
+    const dNow=new Date(now.getTime()+offMs);
+    const dSt =new Date(hit.real.getTime()+offMs);
+    const pre=(dSt.getUTCFullYear()!==dNow.getUTCFullYear()||
+               dSt.getUTCMonth()!==dNow.getUTCMonth()||
+               dSt.getUTCDate()!==dNow.getUTCDate())?"翌 ":"";
+    document.getElementById("d-tr-rng").innerHTML=
+      '<span class="pf">'+pre.trim()+'</span>'+
+      '<span class="tm">'+pad(dh)+":00 – "+pad(dhEnd)+':00</span>';
+    document.getElementById("d-tr").textContent=hms(hit.real-now);
   }
   /* ── 長官 ── */
   govRender(now);
@@ -655,6 +693,40 @@ function govRender(now){
       body;
     box.appendChild(el);
   });
+
+  /* ── ダッシュボード：今並ぶなら ── */
+  // 軍拡が最も近いものを対象に、いま並んで時間内就任が可能か判定
+  const top=items[0];
+  const dg=document.getElementById("d-gov");
+  if(dg){
+    if(!top||top.startReal===null){ dg.textContent="—"; }
+    else{
+      const label=GOV_LABEL[top.cat]||top.cat;
+      const toStart=top.startReal-now;
+      let nEarly=Math.max(1,Math.ceil((top.startReal-now)/ms)+1);
+      let nLate =Math.floor((top.endReal-now)/ms);
+      if(toStart<=0) nEarly=1;
+      const candB=Math.min(nLate,50);
+      if(nEarly>100){
+        dg.innerHTML='<span class="lead">今並ぶなら</span>'+
+          '<span class="rt"><span class="gcat">'+label+'</span>'+
+          '<span class="wait">まだ早い</span></span>';
+      }else if(nEarly<=50 && candB>=1){
+        // 候補者枠で入れる
+        const range=(nEarly===candB)?nEarly+"番目":nEarly+" 〜 "+candB+"番目";
+        dg.innerHTML='<span class="lead">今並ぶなら</span>'+
+          '<span class="rt"><span class="gcat">'+label+'</span>'+
+          '<span class="gnum">候補 '+range+'</span></span>';
+      }else{
+        // 応募者枠
+        const aA=Math.max(nEarly,51)-50, aB=Math.min(nLate,100)-50;
+        const range=(aA===aB)?aA+"番目":aA+" 〜 "+aB+"番目";
+        dg.innerHTML='<span class="lead">今並ぶなら</span>'+
+          '<span class="rt"><span class="gcat">'+label+'</span>'+
+          '<span class="gnum">応募 '+range+'</span></span>';
+      }
+    }
+  }
 }
 
 function mkCls(m){return m==="○"?"ok":m==="△"?"tri":"no";}
