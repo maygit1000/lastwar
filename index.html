@@ -34,6 +34,22 @@ body{
   margin-bottom:16px;
 }
 .bar .id{font-size:14px;letter-spacing:.1em;color:var(--dim)}
+.bar{gap:8px}
+.bar .id{display:none}
+.srv{
+  display:inline-flex;align-items:center;
+  border:1px solid var(--etch);border-radius:4px;
+  color:var(--dim);font-size:14px;padding:6px 8px 6px 10px;
+}
+.srvin{
+  background:none;border:none;outline:none;
+  color:var(--phos);font-family:inherit;font-size:14px;font-weight:600;
+  width:4.2em;padding:0 0 0 2px;
+  -moz-appearance:textfield;
+}
+.srvin::-webkit-outer-spin-button,.srvin::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0;
+}
 .bar .tm{
   font-size:14px;color:var(--phos);font-variant-numeric:tabular-nums;
   background:none;border:1px solid var(--etch);border-radius:3px;
@@ -130,6 +146,7 @@ body{
   display:flex;justify-content:space-between;align-items:baseline;
 }
 .gline .lead{color:var(--dim);font-size:14px}
+.gline2{margin-top:4px}
 .gline .rt{display:flex;align-items:baseline;gap:8px}
 .gline .gcat{font-weight:600}
 .gline .gnum{color:var(--phos);font-weight:600;font-variant-numeric:tabular-nums}
@@ -143,7 +160,7 @@ body{
   font-variant-numeric:tabular-nums;
 }
 .card .name{
-  font-size:14px;letter-spacing:.04em;color:var(--dim);
+  font-size:14px;letter-spacing:.04em;color:var(--amber);
   line-height:1.45;padding-right:12px;
 }
 .card .val{
@@ -254,6 +271,43 @@ body{
 .gcard .grow .rv.on{color:var(--phos);font-weight:600}
 .gcard .grow .rv.off{color:var(--dim)}
 .gcard.soon{border-left:2px solid var(--amber)}
+.tframe{
+  background:var(--plate);border:1px solid var(--etch);
+  border-radius:0;margin-bottom:8px;overflow:hidden;
+}
+.tframe.cur{border-top-color:var(--phos);border-right-color:var(--phos);border-bottom-color:var(--phos);background:#141a16}
+.tframe .th{
+  display:flex;align-items:baseline;gap:10px;
+  padding:12px 16px 10px;border-bottom:1px solid var(--etch);
+}
+.tframe.cur .th{border-bottom-color:#24402a}
+.tframe .th .rng{font-size:14px;color:var(--dim);font-variant-numeric:tabular-nums}
+.tframe.cur .th .rng{color:var(--phos)}
+.tframe .th .catsub{font-size:13px;color:var(--dim)}
+.tframe .th .cat{
+  font-size:16px;font-weight:600;
+  font-family:-apple-system,"Hiragino Sans",sans-serif;
+}
+.tframe .th .now{
+  margin-left:auto;font-size:11px;letter-spacing:.1em;color:var(--phos);
+}
+.titem{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 16px;border-bottom:1px solid var(--etch);
+  cursor:pointer;
+}
+.titem:last-child{border-bottom:none}
+.titem .box{
+  width:20px;height:20px;flex:none;border-radius:5px;
+  border:1.5px solid var(--dim);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--void);
+}
+.titem.done .box{background:var(--phos);border-color:var(--phos)}
+.titem .tx{font-size:15px;font-family:-apple-system,"Hiragino Sans",sans-serif}
+.titem.done .tx{color:var(--dim);text-decoration:line-through}
+.titem .tt{margin-left:auto;font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
+.titem .badge{color:var(--phos);font-weight:600;margin-left:6px}
 .hint{
   font-size:14px;color:var(--dim);text-align:center;
   margin-top:10px;letter-spacing:.02em;
@@ -320,7 +374,7 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
 
 <div class="wrap">
   <div class="bar">
-    <span class="id">ラストウォー</span>
+    <span class="srv">#<input class="srvin" id="srvin" type="number" inputmode="numeric" /></span>
     <button class="tm" id="tz"><span id="tzlab"></span><span id="tzclock"></span></button>
   </div>
 
@@ -357,7 +411,7 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
         <span class="cnt"><span class="cl">次の軍拡まで</span><span class="cv" id="d-tr">—</span></span>
       </div>
       <div class="prow now">
-        <span class="lb">次</span>
+        <span class="lb"></span>
         <span class="cat">兵士</span>
         <span class="rng" id="d-tr-rng"></span>
       </div>
@@ -366,6 +420,7 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
     <button class="card" data-go="gov">
       <div class="name">長官</div>
       <div class="gline" id="d-gov">—</div>
+      <div class="gline gline2" id="d-gov2"></div>
     </button>
 
     <button class="card" data-go="task">
@@ -422,6 +477,12 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
     <div class="eyebrow">軍拡が近い順・就任が時間内に収まる並び順</div>
     <div id="g-list"></div>
   </div>
+
+  <!-- 今日やること -->
+  <div class="page" id="p-todo">
+    <div class="eyebrow" id="todo-day">今日やること</div>
+    <div id="todo-list"></div>
+  </div>
   </div>
 
 </div>
@@ -432,6 +493,7 @@ nav button.on{color:var(--phos);border-top-color:var(--phos)}
   <button data-tab="arms">軍拡</button>
   <button data-tab="task">任務</button>
   <button data-tab="gov">長官</button>
+  <button data-tab="todo">予定</button>
 </div></nav>
 
 <script>
@@ -535,6 +597,8 @@ function render(){
   const sv=serverNow(now), p=sParts(sv);
 
   // ステータスバー
+  { const el=document.getElementById("srvin");
+      if(el && document.activeElement!==el) el.value=SELF_SRV; }
   document.getElementById("tzlab").textContent=tzName();
   document.getElementById("tzclock").textContent=
     DAYS[p.day]+" "+pad(dispH(p.hour))+":"+pad(p.min)+":"+pad(p.sec);
@@ -637,6 +701,8 @@ function render(){
   }
   /* ── 長官 ── */
   govRender(now);
+  /* ── 今日やること ── */
+  todoRender(now);
 }
 
 const GOV_STEP=5;
@@ -694,45 +760,160 @@ function govRender(now){
     box.appendChild(el);
   });
 
-  /* ── ダッシュボード：今並ぶなら ── */
-  // 軍拡が最も近いものを対象に、いま並んで時間内就任が可能か判定
-  const top=items[0];
-  const dg=document.getElementById("d-gov");
-  if(dg){
-    if(!top||top.startReal===null){ dg.textContent="—"; }
-    else{
-      const label=GOV_LABEL[top.cat]||top.cat;
-      const toStart=top.startReal-now;
-      let nEarly=Math.max(1,Math.ceil((top.startReal-now)/ms)+1);
-      let nLate =Math.floor((top.endReal-now)/ms);
-      if(toStart<=0) nEarly=1;
-      const candB=Math.min(nLate,50);
-      if(nEarly>100){
-        dg.innerHTML='<span class="lead">今並ぶなら</span>'+
-          '<span class="rt"><span class="gcat">'+label+'</span>'+
-          '<span class="wait">まだ早い</span></span>';
-      }else if(nEarly<=50 && candB>=1){
-        // 候補者枠で入れる
-        const range=(nEarly===candB)?nEarly+"番目":nEarly+" 〜 "+candB+"番目";
-        dg.innerHTML='<span class="lead">今並ぶなら</span>'+
-          '<span class="rt"><span class="gcat">'+label+'</span>'+
-          '<span class="gnum">候補 '+range+'</span></span>';
-      }else{
-        // 応募者枠
-        const aA=Math.max(nEarly,51)-50, aB=Math.min(nLate,100)-50;
-        const range=(aA===aB)?aA+"番目":aA+" 〜 "+aB+"番目";
-        dg.innerHTML='<span class="lead">今並ぶなら</span>'+
-          '<span class="rt"><span class="gcat">'+label+'</span>'+
-          '<span class="gnum">応募 '+range+'</span></span>';
-      }
+  /* ── ダッシュボード：今並ぶなら（2枠） ── */
+  function govLine(it,leadTxt){
+    if(!it||it.startReal===null) return "";
+    const label=GOV_LABEL[it.cat]||it.cat;
+    const toStart=it.startReal-now;
+    let nEarly=Math.max(1,Math.ceil((it.startReal-now)/ms)+1);
+    let nLate =Math.floor((it.endReal-now)/ms);
+    if(toStart<=0) nEarly=1;
+    const candB=Math.min(nLate,50);
+    let right;
+    if(nEarly>100){
+      right='<span class="gcat">'+label+'</span><span class="wait">まだ早い</span>';
+    }else if(nEarly<=50 && candB>=1){
+      const range=(nEarly===candB)?nEarly+"番目":nEarly+" 〜 "+candB+"番目";
+      right='<span class="gcat">'+label+'</span><span class="gnum">候補 '+range+'</span>';
+    }else{
+      const aA=Math.max(nEarly,51)-50, aB=Math.min(nLate,100)-50;
+      const range=(aA===aB)?aA+"番目":aA+" 〜 "+aB+"番目";
+      right='<span class="gcat">'+label+'</span><span class="gnum">応募 '+range+'</span>';
     }
+    return '<span class="lead">'+leadTxt+'</span><span class="rt">'+right+'</span>';
+  }
+  const dg=document.getElementById("d-gov");
+  const dg2=document.getElementById("d-gov2");
+  if(dg){
+    const l1=govLine(items[0],"今並ぶなら");
+    dg.innerHTML=l1||"—";
+    // 2枠目：次に近い別カテゴリ
+    const l2=govLine(items[1],"次は");
+    if(dg2) dg2.innerHTML=l2;
   }
 }
 
 function mkCls(m){return m==="○"?"ok":m==="△"?"tri":"no";}
 
 /* ══ タブ ══ */
-const PG={home:"p-home",arms:"p-arms",vs:"p-vs",task:"p-task",gov:"p-gov"};
+/* ══ 今日やること ══ */
+let SELF_SRV=(()=>{ try{return parseInt(localStorage.getItem("lw_srv"))||1251;}catch(e){return 1251;} })();
+function setSelfSrv(n){
+  SELF_SRV=n;
+  try{localStorage.setItem("lw_srv",String(n));}catch(e){}
+  render();
+}
+function serverDateKey(now){
+  const sv=serverNow(now);
+  return sv.getUTCFullYear()+"-"+pad(sv.getUTCMonth()+1)+"-"+pad(sv.getUTCDate());
+}
+let TODO_STATE=null, TODO_KEY=null;
+function loadTodo(now){
+  const k="lw_todo_"+serverDateKey(now);
+  if(TODO_KEY===k && TODO_STATE) return;
+  TODO_KEY=k;
+  try{ TODO_STATE=JSON.parse(localStorage.getItem(k)||"{}"); }
+  catch(e){ TODO_STATE={}; }
+}
+function saveTodo(){ try{ localStorage.setItem(TODO_KEY,JSON.stringify(TODO_STATE)); }catch(e){} }
+function toggleTodo(id){
+  loadTodo(new Date());
+  TODO_STATE[id]=!TODO_STATE[id];
+  saveTodo(); render();
+}
+function todoRender(now){
+  loadTodo(now);
+  const sv=serverNow(now);
+  const box=document.getElementById("todo-list");
+  if(!box) return;
+  const svDay=sv.getUTCDay();
+  // 各軍拡枠 slot0..5 = JST 11/15/19/23/3/7、そのカテゴリ
+  const cats={};              // JST開始時 -> カテゴリ
+  for(let i=0;i<6;i++){ cats[(SLOTS[i]+11)%24]=ARMS[svDay][i]; }
+  // 現在の軍拡枠のJST開始
+  const cur=slotAt(now,0);
+  const curJh=(SLOTS[cur.slot]+11)%24;
+  const grp=kiraGroup(sv), selfKira=(SRV[SELF_SRV]===grp);
+
+  // ある時刻がどの軍拡カテゴリの時間帯か（4hさかのぼって直近の枠開始を探す）
+  function catAt(jh){
+    for(let d=0;d<24;d++){ const h=(jh-d+24)%24; if(cats[h]!==undefined) return {cat:cats[h],start:h}; }
+    return {cat:"",start:jh};
+  }
+
+  // 時刻パネルを構築：キーはJST時刻
+  const panels={};  // jh -> {items:[], cat, start}
+  function ensure(jh){
+    if(!panels[jh]){ const c=catAt(jh); panels[jh]={items:[],cat:c.cat,start:c.start}; }
+    return panels[jh];
+  }
+  // 軍拡6枠：開始時刻パネルに「軍拡」「トラック」
+  for(let i=0;i<6;i++){
+    const jh=(SLOTS[i]+11)%24, cat=ARMS[svDay][i];
+    const P=ensure(jh);
+    P.items.push({id:"f"+i+"_arms", tx:"軍拡："+cat+"を進める"});
+    if(jh!==3) P.items.push({id:"f"+i+"_truck", tx:"トラック1台出発"});
+  }
+  // 11:00：賞金首/ボス、貿易列車11/14、決闘、極秘(自分)、レーダー/UR、盟友(非キラキラ)
+  ensure(11).items.push({id:"boss", tx:"賞金首 / ボス"});
+  ensure(11).items.push({id:"train11", tx:"貿易列車"});
+  ensure(14).items.push({id:"train14", tx:"貿易列車"});
+  ensure(11).items.push({id:"duel", tx:"真昼の決闘"});
+  ensure(11).items.push({id:"secret", tx:"極秘任務（自分）"});
+  const vs=VS[svDay];
+  if(vs[1]!=="\u00d7") ensure(11).items.push({id:"radar", tx:"レーダー"+(vs[1]==="\u25b3"?"（対象外）":"")});
+  if(vs[2]!=="\u00d7") ensure(11).items.push({id:"ur", tx:"UR"});
+  if(!selfKira) ensure(13).items.push({id:"ally", tx:"極秘任務（盟友）"});
+  // 15:00：貿易列車18、他サーバー窃盗(グループ)、盟友(キラキラ)
+  ensure(18).items.push({id:"train18", tx:"貿易列車"});
+  ensure(15).items.push({id:"steal", tx:"極秘任務（他サーバー）", badge:grp});
+  if(selfKira) ensure(15).items.push({id:"ally", tx:"極秘任務（盟友）"});
+  // 19:00：貿易列車22
+  ensure(22).items.push({id:"train22", tx:"貿易列車"});
+
+  // 時刻順に並べる。運用起点は11:00 → 昇順で 11,13,14,15,18,19,22,23,3,7
+  const order=Object.keys(panels).map(Number).sort((a,b)=>{
+    const norm=x=> (x<11? x+24 : x);   // 11時起点で回す
+    return norm(a)-norm(b);
+  });
+
+  const CATCOLOR={"兵士":"#c4573f","科学":"#3f6ea8","基地":"#c9a227","英雄":"#8659b5","ドローン":"#3fa8a0"};
+
+  box.innerHTML="";
+  order.forEach(jh=>{
+    const P=panels[jh];
+    const isFrameStart=(cats[jh]!==undefined);   // 軍拡が切り替わる時刻か
+    const col=CATCOLOR[P.cat]||"#555";
+    const isCur=(P.start===curJh);
+    const el=document.createElement("div");
+    el.className="tframe"+(isCur?" cur":"");
+    el.style.borderLeftColor=col;
+    el.style.borderLeftWidth="3px";
+    let head='<div class="th">'+
+      '<span class="rng">'+pad(jh)+':00</span>';
+    if(isFrameStart) head+='<span class="cat" style="color:'+col+'">'+P.cat+'</span>';
+    else head+='<span class="catsub">'+P.cat+'の時間帯</span>';
+    if(isCur) head+='<span class="now">今ここ</span>';
+    head+='</div>';
+    let html=head;
+    P.items.forEach(it=>{
+      const done=!!TODO_STATE[it.id];
+      html+='<div class="titem'+(done?" done":"")+'" data-tid="'+it.id+'">'+
+        '<span class="box">'+(done?"\u2713":"")+'</span>'+
+        '<span class="tx">'+it.tx+(it.badge?'<span class="badge">'+it.badge+'</span>':'')+'</span>'+
+        '</div>';
+    });
+    el.innerHTML=html;
+    box.appendChild(el);
+  });
+  document.getElementById("todo-day").textContent=DAYS[svDay]+"\u66dc\u65e5 \u3084\u308b\u3053\u3068";
+  box.onclick=function(e){
+    const row=e.target.closest(".titem");
+    if(row) toggleTodo(row.dataset.tid);
+  };
+}
+
+const PG={home:"p-home",arms:"p-arms",vs:"p-vs",task:"p-task",gov:"p-gov",todo:"p-todo"};
 function go(t){
   DAYOFF=0;
   Object.values(PG).forEach(id=>document.getElementById(id).classList.remove("on"));
@@ -746,6 +927,17 @@ document.querySelectorAll("nav button").forEach(b=>
 document.querySelectorAll("[data-go]").forEach(c=>
   c.addEventListener("click",()=>go(c.dataset.go)));
 
+(function(){
+  const el=document.getElementById("srvin");
+  function commit(){
+    const n=parseInt(el.value);
+    if(n && SRV[n]!==undefined){ setSelfSrv(n); }
+    else { el.value=SELF_SRV; }   // 無効なら元に戻す
+  }
+  el.addEventListener("change",commit);
+  el.addEventListener("blur",commit);
+  el.addEventListener("keydown",e=>{ if(e.key==="Enter") el.blur(); });
+})();
 document.getElementById("tz").addEventListener("click",()=>
   setMode(MODE==="jst"?"srv":"jst"));
 
